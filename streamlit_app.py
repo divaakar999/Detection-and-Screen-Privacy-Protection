@@ -18,7 +18,6 @@ try:
     HAS_CV2 = True
 except ImportError:
     HAS_CV2 = False
-    st.warning("⚠️ OpenCV not available - running in demo mode")
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent))
@@ -46,30 +45,59 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main {
-        padding: 2rem;
+        padding: 1.5rem;
     }
-    .stMetric {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
+    
+    /* Header styling */
+    h1 {
+        color: #fff;
+        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+    }
+    
+    /* Metric cards */
+    [data-testid="metric-container"] {
+        background-color: #1e293b;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
         border-left: 4px solid #3b82f6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+    
+    /* Threat alert */
     .threat-alert {
-        background-color: #fee2e2;
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
         border: 2px solid #dc2626;
         padding: 1.5rem;
-        border-radius: 0.5rem;
-        margin: 1rem 0;
+        border-radius: 0.75rem;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 6px rgba(220, 38, 38, 0.1);
     }
+    
+    /* Safe status */
     .safe-status {
         color: #16a34a;
         font-weight: bold;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
+    
+    /* Threat status */
     .threat-status {
         color: #dc2626;
         font-weight: bold;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+    }
+    
+    /* Sidebar styling */
+    .sidebar .sidebar-content {
+        padding: 1.5rem;
+    }
+    
+    [data-testid="stSidebar"] {
+        background-color: #0f172a;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -132,6 +160,14 @@ st.markdown("**Real-Time Privacy Protection** | Deployed on Streamlit Cloud")
 # ========== SIDEBAR CONFIG ==========
 with st.sidebar:
     st.header("⚙️ Configuration")
+    
+    # Show warning if OpenCV not available
+    if not HAS_CV2:
+        st.warning("⚠️ Running in **Demo Mode** - OpenCV not available on cloud")
+    else:
+        st.success("✅ **Live Mode** - Webcam available")
+    
+    st.divider()
     
     col1, col2 = st.columns(2)
     with col1:
