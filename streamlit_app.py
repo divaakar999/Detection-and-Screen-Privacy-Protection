@@ -41,70 +41,67 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ========== CUSTOM STYLING ==========
+# ========== CUSTOM STYLING - LIGHT THEME ==========
 st.markdown("""
 <style>
     /* Overall page styling */
     .main {
-        background-color: #0f172a;
+        background-color: #f8fafc;
         padding: 2rem;
     }
     
     /* Title styling */
     h1 {
-        color: #ffffff;
-        font-size: 2.5rem;
+        color: #1e293b;
+        font-size: 2.2rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
     }
     
     /* Subtitle styling */
     .subtitle {
-        color: #94a3b8;
-        font-size: 1rem;
+        color: #64748b;
+        font-size: 0.95rem;
         margin-bottom: 2rem;
+        font-weight: 500;
     }
     
     /* Metric containers */
     [data-testid="metric-container"] {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        border: 1px solid #334155;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         padding: 1.5rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         transition: all 0.3s ease;
     }
     
     [data-testid="metric-container"]:hover {
-        border-color: #3b82f6;
-        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         transform: translateY(-2px);
     }
     
     /* Metric labels */
     [data-testid="metric-container"] label {
-        color: #cbd5e1;
-        font-size: 0.875rem;
+        color: #64748b;
+        font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        font-weight: 600;
+        font-weight: 700;
     }
     
     /* Metric values */
     [data-testid="metric-container"] > div:nth-child(2) {
-        color: #ffffff;
+        color: #1e293b;
         font-size: 2rem;
         font-weight: 700;
     }
     
     /* Safe status */
     .safe-alert {
-        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
-        border: 1px solid #22c55e;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);
+        border: 1px solid #bbf7d0;
         border-left: 4px solid #22c55e;
         padding: 1.5rem;
         border-radius: 0.75rem;
@@ -112,30 +109,35 @@ st.markdown("""
     }
     
     .safe-alert h3 {
-        color: #22c55e;
+        color: #15803d;
         margin: 0 0 0.5rem 0;
+    }
+    
+    .safe-alert p {
+        color: #166534;
+        margin: 0;
     }
     
     /* Threat alert */
     .threat-alert {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
-        border: 1px solid #ef4444;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 100%);
+        border: 1px solid #fecaca;
         border-left: 4px solid #ef4444;
         padding: 1.5rem;
         border-radius: 0.75rem;
         margin: 1.5rem 0;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
     
     .threat-alert h3 {
-        color: #ef4444;
+        color: #991b1b;
         margin: 0 0 0.5rem 0;
         font-size: 1.25rem;
     }
     
     .threat-alert p {
-        color: #fecaca;
+        color: #b91c1c;
         margin: 0;
     }
     
@@ -158,20 +160,21 @@ st.markdown("""
     }
     
     .status-safe {
-        background-color: rgba(34, 197, 94, 0.2);
-        color: #22c55e;
-        border: 1px solid #22c55e;
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
     }
     
     .status-threat {
-        background-color: rgba(239, 68, 68, 0.2);
-        color: #ef4444;
-        border: 1px solid #ef4444;
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
     }
     
     /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #0f172a;
+        background-color: #ffffff;
+        border-right: 1px solid #e2e8f0;
     }
     
     [data-testid="stSidebar"] > div:first-child {
@@ -180,11 +183,17 @@ st.markdown("""
     
     /* Section headers */
     h2, h3 {
-        color: #ffffff;
+        color: #1e293b;
+    }
+    
+    h2 {
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
     }
     
     .stDivider {
-        border-color: #334155;
+        border-color: #e2e8f0;
     }
     
     /* Button styling */
@@ -196,32 +205,36 @@ st.markdown("""
         font-weight: 600;
         padding: 0.75rem 1.5rem;
         transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
     }
     
     .stButton > button:hover {
         background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
         transform: translateY(-2px);
     }
     
     /* Slider styling */
     .stSlider > label {
-        color: #cbd5e1;
+        color: #1e293b;
+        font-weight: 600;
     }
     
     /* Checkbox styling */
     .stCheckbox > label {
-        color: #cbd5e1;
+        color: #1e293b;
+        font-weight: 500;
     }
     
     /* Number input styling */
     .stNumberInput > label {
-        color: #cbd5e1;
+        color: #1e293b;
+        font-weight: 600;
     }
     
     /* Text styling */
     p, span, li {
-        color: #cbd5e1;
+        color: #475569;
     }
     
     /* Links */
@@ -231,8 +244,27 @@ st.markdown("""
     }
     
     a:hover {
-        color: #60a5fa;
+        color: #2563eb;
         text-decoration: underline;
+    }
+    
+    /* Info/Warning/Success boxes */
+    .stInfo {
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #1e40af;
+    }
+    
+    .stWarning {
+        background-color: #fef3c7;
+        border: 1px solid #fcd34d;
+        color: #92400e;
+    }
+    
+    .stSuccess {
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #15803d;
     }
 </style>
 """, unsafe_allow_html=True)
