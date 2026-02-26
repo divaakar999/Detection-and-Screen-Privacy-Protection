@@ -400,176 +400,90 @@ with st.sidebar:
         st.session_state.alerts = []
         st.success("✅ Alert history cleared!")
 
-# ========== MAIN CONTENT ==========
-col1, col2, col3, col4 = st.columns(4)
+# ========== TAB NAVIGATION ==========
+tabs = st.tabs(["Dashboard", "Settings", "Logs"])
 
-with col1:
-    st.metric(
-        "Faces Detected",
-        st.session_state.metrics['face_count'],
-        delta=None,
-        help="Number of faces in frame"
+# ========== DASHBOARD TAB ==========
+with tabs[0]:
+    st.header("📊 Dashboard")
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Faces Detected",
+            st.session_state.metrics['face_count'],
+            help="Number of faces in frame"
+        )
+
+    with col2:
+        st.metric(
+            "FPS",
+            f"{st.session_state.metrics['fps']:.1f}",
+            help="Frames processed per second"
+        )
+
+    with col3:
+        st.metric(
+            "Latency",
+            f"{st.session_state.metrics['latency']:.0f}ms",
+            help="Processing time per frame"
+        )
+
+    with col4:
+        threat_label = "🚨 THREAT!" if st.session_state.threat_active else "✅ SAFE"
+        st.metric(
+            "Threat Status",
+            threat_label,
+            help="Current threat status"
+        )
+
+    # Placeholder for future data visualizations
+    st.subheader("📈 Data Visualizations")
+    st.write("(Charts and graphs will be added here)")
+
+# ========== SETTINGS TAB ==========
+with tabs[1]:
+    st.header("⚙️ Settings")
+    st.sidebar.header("⚙️ Configuration")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.session_state.blur_enabled = st.checkbox(
+            "🔲 Screen Blur",
+            value=st.session_state.blur_enabled,
+            help="Blur screen when threat detected"
+        )
+    with col2:
+        st.session_state.gaze_enabled = st.checkbox(
+            "👀 Gaze Analysis",
+            value=st.session_state.gaze_enabled,
+            help="Analyze where person is looking"
+        )
+
+    st.session_state.sensitivity = st.slider(
+        "Threat Sensitivity",
+        min_value=1,
+        max_value=10,
+        value=st.session_state.sensitivity,
+        help="Higher = more sensitive to threats"
     )
 
-with col2:
-    st.metric(
-        "FPS",
-        f"{st.session_state.metrics['fps']:.1f}",
-        delta=None,
-        help="Frames processed per second"
-    )
+    st.divider()
+    st.subheader("📱 Demo Options")
 
-with col3:
-    st.metric(
-        "Latency",
-        f"{st.session_state.metrics['latency']:.0f}ms",
-        delta=None,
-        help="Processing time per frame"
-    )
-
-with col4:
-    threat_label = "🚨 THREAT!" if st.session_state.threat_active else "✅ SAFE"
-    st.metric(
-        "Threat Status",
-        threat_label,
-        help="Current threat status"
-    )
-
-# ========== ALERT SECTION ==========
-if st.session_state.threat_active:
-    st.markdown("""
-    <div class='threat-alert'>
-        <h3>🚨 THREAT DETECTED!</h3>
-        <p>Multiple faces detected in frame. Screen blur activated.</p>
-    </div>
-    """, unsafe_allow_html=True)
-else:
-    st.markdown("""
-    <div class='safe-alert'>
-        <h3>✅ All Clear</h3>
-        <p>No threats detected. System operating normally.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# ========== VIDEO SECTION ==========
-st.subheader("📹 Video Stream")
-
-col_video, col_info = st.columns([2, 1])
-
-with col_video:
-    # Create placeholder for video
-    video_placeholder = st.empty()
-    status_placeholder = st.empty()
-    
-    # Start/Stop buttons
-    col_start, col_stop = st.columns(2)
-    with col_start:
-        if st.button("▶ Start Webcam", key="start_btn"):
-            st.session_state.is_running = True
-            st.rerun()
-    
-    with col_stop:
-        if st.button("⏹ Stop Webcam", key="stop_btn"):
-            st.session_state.is_running = False
-            st.rerun()
-    
-    # Webcam capture (only if cv2 is available)
-    if HAS_CV2 and st.session_state.is_running:
-        try:
-            camera = cv2.VideoCapture(0)
-            
-            if not camera.isOpened():
-                st.error("❌ Could not access webcam")
-                st.session_state.is_running = False
-            else:
-                status_placeholder.info("📹 Webcam active - Click 'Stop Webcam' to exit")
-                
-                # Simple frame loop
-                frame_count = 0
-                while st.session_state.is_running:
-                    ret, frame = camera.read()
-                    
-                    if not ret:
-                        st.error("Failed to grab frame")
-                        break
-                    
-                    # Resize for display
-                    frame = cv2.resize(frame, (640, 480))
-                    
-                    # Simple face detection
-                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                    face_cascade = cv2.CascadeClassifier(
-                        cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-                    )
-                    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-                    
-                    # Draw faces
-                    face_count = len(faces)
-                    for (x, y, w, h) in faces:
-                        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                    
-                    # Update threat status
-                    st.session_state.threat_active = face_count >= threat_faces
-                    st.session_state.metrics['face_count'] = face_count
-                    st.session_state.metrics['frames_processed'] = frame_count
-                    
-                    # Log if threat
-                    if st.session_state.threat_active:
-                        if not any(a['frame'] == frame_count for a in st.session_state.alerts):
-                            st.session_state.alerts.append({
-                                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                'frame': frame_count,
-                                'face_count': face_count
-                            })
-                    
-                    # Display frame with threat overlay
-                    if st.session_state.threat_active:
-                        # Add red border
-                        cv2.rectangle(frame, (5, 5), (635, 475), (0, 0, 255), 3)
-                        cv2.putText(frame, "THREAT DETECTED", (20, 50),
-                                  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-                    
-                    # Convert to RGB for display
-                    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                    
-                    # Display frame
-                    video_placeholder.image(frame_rgb, channels="RGB")
-                    
-                    frame_count += 1
-                    st.session_state.metrics['frames_processed'] = frame_count
-                    
-                    # Check for rerun
-                    if not st.session_state.is_running:
-                        break
-                
-                camera.release()
-                status_placeholder.success("✅ Webcam stopped")
-        
-        except Exception as e:
-            st.error(f"❌ Error: {str(e)}")
-            st.session_state.is_running = False
-    elif not HAS_CV2 and st.session_state.is_running:
-        st.info("📡 Running demo mode (OpenCV not available on cloud)")
+    if st.button("▶ Run Demo Mode"):
+        st.session_state.is_running = True
+        st.success("✅ Demo mode started! Showing simulated detection...")
         run_demo_mode()
-    else:
-        # Display placeholder with Pillow instead of cv2
-        placeholder_img = Image.new('RGB', (640, 480), color=(0, 0, 0))
-        draw = ImageDraw.Draw(placeholder_img)
-        text = "Click 'Start Webcam' to begin"
-        # Draw text (simple without fonts)
-        draw.multiline_text((150, 230), text, fill=(255, 255, 255))
-        video_placeholder.image(placeholder_img)
 
-with col_info:
-    st.subheader("📊 Frame Details")
-    st.write(f"**Frames Processed:** {st.session_state.metrics['frames_processed']}")
-    st.write(f"**Faces in Frame:** {st.session_state.metrics['face_count']}")
-    st.write(f"**Sensitivity Level:** {st.session_state.sensitivity}/10")
-    
-    if st.session_state.blur_enabled:
-        st.write("✅ **Blur:** Enabled")
-    else:
-        st.write("❌ **Blur:** Disabled")
+    if st.button("🗑 Clear History"):
+        st.session_state.alerts = []
+        st.success("✅ Alert history cleared!")
+
+# ========== LOGS TAB ==========
+with tabs[2]:
+    st.header("📜 Logs")
+    st.write("(Logs will be displayed here)")
 
 # ========== ALERT HISTORY ==========
 st.subheader("🔔 Alert History")
