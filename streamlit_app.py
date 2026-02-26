@@ -95,6 +95,36 @@ if 'blur_enabled' not in st.session_state:
 if 'gaze_enabled' not in st.session_state:
     st.session_state.gaze_enabled = True
 
+# ========== DEMO MODE FUNCTION ==========
+def run_demo_mode():
+    """Run demonstration with simulated data"""
+    st.info("📊 Running demo scenario with simulated detections...")
+    
+    demo_data = [
+        (1, False), (1, False), (2, True), (2, True), (2, True), (1, False)
+    ]
+    
+    progress_bar = st.progress(0)
+    
+    for idx, (face_count, threat) in enumerate(demo_data):
+        st.session_state.metrics['face_count'] = face_count
+        st.session_state.threat_active = threat
+        
+        if threat:
+            st.session_state.alerts.append({
+                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'frame': idx,
+                'face_count': face_count
+            })
+        
+        progress_bar.progress((idx + 1) / len(demo_data))
+        
+        import time
+        time.sleep(1)
+    
+    st.success("✅ Demo completed!")
+    st.rerun()
+
 # ========== HEADER ==========
 st.title("🔒 Shoulder Surfing Detection System")
 st.markdown("**Real-Time Privacy Protection** | Deployed on Streamlit Cloud")
@@ -283,7 +313,7 @@ with col_video:
                     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     
                     # Display frame
-                    video_placeholder.image(frame_rgb, channels="RGB", use_column_width=True)
+                    video_placeholder.image(frame_rgb, channels="RGB")
                     
                     frame_count += 1
                     st.session_state.metrics['frames_processed'] = frame_count
@@ -308,7 +338,7 @@ with col_video:
         text = "Click 'Start Webcam' to begin"
         # Draw text (simple without fonts)
         draw.multiline_text((150, 230), text, fill=(255, 255, 255))
-        video_placeholder.image(placeholder_img, use_column_width=True)
+        video_placeholder.image(placeholder_img)
 
 with col_info:
     st.subheader("📊 Frame Details")
@@ -408,35 +438,4 @@ st.markdown("""
     <p><small>v1.0 | Deployed on <a href='https://streamlit.io'>Streamlit Cloud</a></small></p>
 </div>
 """, unsafe_allow_html=True)
-
-
-# ========== DEMO MODE FUNCTION ==========
-def run_demo_mode():
-    """Run demonstration with simulated data"""
-    st.info("📊 Running demo scenario with simulated detections...")
-    
-    demo_data = [
-        (1, False), (1, False), (2, True), (2, True), (2, True), (1, False)
-    ]
-    
-    progress_bar = st.progress(0)
-    
-    for idx, (face_count, threat) in enumerate(demo_data):
-        st.session_state.metrics['face_count'] = face_count
-        st.session_state.threat_active = threat
-        
-        if threat:
-            st.session_state.alerts.append({
-                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                'frame': idx,
-                'face_count': face_count
-            })
-        
-        progress_bar.progress((idx + 1) / len(demo_data))
-        
-        import time
-        time.sleep(1)
-    
-    st.success("✅ Demo completed!")
-    st.rerun()
 
