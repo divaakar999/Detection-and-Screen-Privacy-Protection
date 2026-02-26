@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoulder Surfing Detection - Web App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🔒 Shoulder Surfing Detection</h1>
+            <p class="subtitle">Real-Time Privacy Protection System</p>
+        </header>
+
+        <!-- Status Section -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-label">Connection Status:</span>
+                <span id="connection-status" class="status-value disconnected">🔴 Disconnected</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">System Status:</span>
+                <span id="system-status" class="status-value stopped">🛑 Stopped</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Camera:</span>
+                <span id="camera-status" class="status-value off">📹 Off</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-grid">
+            <!-- Video Stream Section -->
+            <section class="video-section">
+                <div class="video-container">
+                    <canvas id="video-canvas" width="640" height="480"></canvas>
+                    <div id="no-camera" class="no-camera">
+                        <p>📹 Click "Start Webcam" to begin</p>
+                    </div>
+                </div>
+                <div class="video-controls">
+                    <button id="start-webcam-btn" class="btn btn-primary">▶ Start Webcam</button>
+                    <button id="stop-webcam-btn" class="btn btn-secondary" disabled>⏹ Stop Webcam</button>
+                </div>
+            </section>
+
+            <!-- Metrics Section -->
+            <section class="metrics-section">
+                <h2>📊 Real-Time Metrics</h2>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Faces Detected</div>
+                        <div class="metric-value" id="faces-count">0</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">FPS</div>
+                        <div class="metric-value" id="fps-value">0.0</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">Latency</div>
+                        <div class="metric-value" id="latency-value">0ms</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">Threat Status</div>
+                        <div class="metric-value" id="threat-status">✅ Safe</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Alert Section -->
+        <section class="alert-section" id="alert-section" style="display: none;">
+            <div class="alert-content">
+                <div class="alert-icon">🚨</div>
+                <div class="alert-text">
+                    <h3>THREAT DETECTED!</h3>
+                    <p id="alert-message">Multiple faces detected in frame</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls Section -->
+        <section class="controls-section">
+            <h2>⚙️ Settings</h2>
+            
+            <div class="control-group">
+                <label for="blur-toggle" class="toggle-label">
+                    <input type="checkbox" id="blur-toggle" checked>
+                    <span class="toggle-switch"></span>
+                    Enable Screen Blur on Threat
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label for="gaze-toggle" class="toggle-label">
+                    <input type="checkbox" id="gaze-toggle" checked>
+                    <span class="toggle-switch"></span>
+                    Enable Gaze Analysis
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label for="sensitivity-slider" class="slider-label">
+                    Threat Sensitivity:
+                    <input type="range" id="sensitivity-slider" min="1" max="10" value="5">
+                    <span id="sensitivity-value">5</span>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label for="alert-volume" class="slider-label">
+                    Alert Volume:
+                    <input type="range" id="alert-volume" min="0" max="100" value="50">
+                    <span id="alert-volume-value">50%</span>
+                </label>
+            </div>
+
+            <button id="export-btn" class="btn btn-secondary full-width">📥 Export Metrics</button>
+        </section>
+
+        <!-- Alert History Section -->
+        <section class="history-section">
+            <h2>🔔 Alert History</h2>
+            <div class="history-list" id="history-list">
+                <p class="empty-message">No alerts yet</p>
+            </div>
+            <button id="clear-history-btn" class="btn btn-secondary" style="width: 100%; margin-top: 10px;">Clear History</button>
+        </section>
+
+        <!-- Logs Section -->
+        <section class="logs-section">
+            <h2>📋 System Logs</h2>
+            <div class="logs-list" id="logs-list">
+                <p class="log-entry">System initialized</p>
+            </div>
+            <button id="clear-logs-btn" class="btn btn-secondary" style="width: 100%; margin-top: 10px;">Clear Logs</button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Real-Time Shoulder Surfing Detection System | v1.0</p>
+            <p><small>For security and privacy protection</small></p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

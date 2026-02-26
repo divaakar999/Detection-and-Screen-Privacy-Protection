@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv*/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+detection_events.log*
+detection_events_*.jsonl
+
+# Data
+data/
+*.csv
+*.json
+!config/*.json
+
+# Models
+models/
+!models/README.md
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.avi
+*.mp4
+*.mov
+screenshots/
+*.pid
+
+# Chrome extension
+chrome-extension/images/
+
+# Config files with sensitive data
+config/local_settings.py
+
+# Cache
+.cache/

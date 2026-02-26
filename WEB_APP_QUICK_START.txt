@@ -1,0 +1,259 @@
+📱 WEB APP - QUICK START GUIDE
+═════════════════════════════════════════════════════════════════════════
+
+🚀 LAUNCH THE WEB APP
+
+Method 1: Using the provided launcher
+    python start_web_app.py
+
+Method 2: Using run.py with --web flag
+    python run.py --web
+
+Method 3: Direct server startup
+    python web_server.py
+
+════════════════════════════════════════════════════════════════════════
+
+🌐 ACCESSING THE APP
+
+Once the server starts:
+    1. Open your browser
+    2. Navigate to: http://localhost:5000
+    3. Grant camera permission when prompted
+    4. Click "▶ Start Webcam" to begin detection
+
+════════════════════════════════════════════════════════════════════════
+
+📊 FEATURES AT A GLANCE
+
+Video Stream:
+    • Live camera feed with threat overlay
+    • Real-time face detection display
+    • Threat visualization when multiple faces detected
+
+Metrics Dashboard:
+    • Faces Detected: Current face count in frame
+    • FPS: Frames processed per second
+    • Latency: Processing time per frame (ms)
+    • Threat Status: Safe or Alert status
+
+Settings:
+    • Screen Blur: Enable/disable automatic blur on threat
+    • Gaze Analysis: Enable/disable viewing direction analysis
+    • Sensitivity: Adjust threat detection level (1-10)
+    • Alert Volume: Control sound alert volume (0-100%)
+
+Monitoring:
+    • Alert History: View all detected threats with timestamps
+    • System Logs: Real-time system activity log
+    • Export Metrics: Download session data as JSON
+
+════════════════════════════════════════════════════════════════════════
+
+🎮 BASIC USAGE STEPS
+
+1. START WEBCAM
+   Click "▶ Start Webcam" button
+   → Browser will request camera access
+   → Grant permission to continue
+   → Live feed appears in video canvas
+
+2. MONITOR METRICS
+   Watch the metrics dashboard:
+   → Faces Detected count
+   → FPS processing rate
+   → Latency per frame
+   → Threat status indicator
+
+3. TEST THREAT DETECTION
+   When you want to test detection:
+   → Introduce another person to the webcam frame
+   → System detects multiple faces
+   → Alert appears with sound
+   → Screen blur activates (if enabled)
+
+4. ADJUST SETTINGS
+   Customize detection behavior:
+   → Toggle Screen Blur on/off
+   → Toggle Gaze Analysis on/off
+   → Adjust Sensitivity slider (1 = least sensitive, 10 = most)
+   → Adjust Alert Volume (0-100%)
+
+5. EXPORT DATA
+   Download session metrics:
+   → Click "📥 Export Metrics" button
+   → JSON file downloads automatically
+   → Contains all metrics, alerts, and logs
+
+════════════════════════════════════════════════════════════════════════
+
+⚙️ API ENDPOINTS (For Developers)
+
+Status & Information:
+    GET /api/health          → Server health status
+    GET /api/status          → Current system status
+    GET /api/metrics         → Detailed metrics
+    GET /api/config          → Current configuration
+
+Control:
+    POST /api/start          → Start detection
+    POST /api/stop           → Stop detection
+    PUT /api/config          → Update settings
+
+Example API Call (using curl or Python):
+    curl http://localhost:5000/api/status
+    
+Example Configuration Update:
+    curl -X PUT http://localhost:5000/api/config \
+         -H "Content-Type: application/json" \
+         -d '{"sensitivity": 7, "blur_enabled": true}'
+
+════════════════════════════════════════════════════════════════════════
+
+🔌 WEBSOCKET EVENTS (For Advanced Users)
+
+The app uses WebSocket for real-time communication:
+
+From Server to Client:
+    • metrics_updated → New metrics available
+    • threat_detected → Threat alert triggered
+    • config_updated → Settings changed
+    • system_started → System started
+    • system_stopped → System stopped
+
+From Client to Server:
+    • process_frame → Send frame for processing
+    • update_config → Update configuration
+
+════════════════════════════════════════════════════════════════════════
+
+📋 KEYBOARD SHORTCUTS
+
+• Q or ESC         → Close webcam/stop stream
+• SPACEBAR         → Pause/Resume (if supported)
+• F11              → Full-screen browser (browser dependent)
+• CTRL+SHIFT+I     → Open developer console (for debugging)
+
+════════════════════════════════════════════════════════════════════════
+
+🛠️ TROUBLESHOOTING
+
+CAMERA NOT WORKING:
+    ✓ Check browser camera permissions
+    ✓ Allow access when prompted
+    ✓ Try different browser (Chrome recommended)
+    ✓ Ensure no other app is using camera
+    ✓ Restart browser
+
+NO CONNECTION:
+    ✓ Verify server is running (terminal shows activity)
+    ✓ Check URL: http://localhost:5000
+    ✓ Check browser console (F12) for errors
+    ✓ Try port 5000 not blocked by firewall
+
+POOR PERFORMANCE:
+    ✓ Reduce Sensitivity setting
+    ✓ Close other browser tabs
+    ✓ Close other applications
+    ✓ Check CPU/memory usage
+    ✓ Ensure good lighting for detection
+
+NO AUDIO ALERTS:
+    ✓ Check browser audio settings
+    ✓ Allow microphone/speaker access
+    ✓ Verify Alert Volume > 0%
+    ✓ Check system volume
+
+METRICS NOT UPDATING:
+    ✓ Check WebSocket connection (check browser console)
+    ✓ Try refreshing page (F5)
+    ✓ Verify server is running
+    ✓ Check browser compatibility
+
+════════════════════════════════════════════════════════════════════════
+
+✨ FEATURES & CAPABILITIES
+
+Detection Modes:
+    ✓ Real-time face detection (CNN-based)
+    ✓ Multiple face detection
+    ✓ Gaze direction analysis
+    ✓ Configurable sensitivity
+    ✓ Alert triggering on threats
+
+Protection Measures:
+    ✓ Automatic screen blur
+    ✓ Customizable blur types
+    ✓ Smooth blur transitions
+    ✓ Configurable alert sounds
+    ✓ Visual threat indicators
+
+Monitoring:
+    ✓ Real-time FPS counter
+    ✓ Latency measurement
+    ✓ Face count tracking
+    ✓ Alert history logging
+    ✓ Session statistics
+
+Data Export:
+    ✓ JSON export of all metrics
+    ✓ Alert history timeline
+    ✓ System logs
+    ✓ Performance statistics
+
+════════════════════════════════════════════════════════════════════════
+
+📚 ADDITIONAL RESOURCES
+
+For More Information:
+    • WEB_APP_README.md      → Comprehensive web app documentation
+    • README.md              → System architecture and features
+    • QUICK_REFERENCE.md     → Command reference guide
+    • START_HERE.md          → Overall project quick start
+
+Video Streaming:
+    • Uses Canvas API for rendering
+    • Processes frames in real-time
+    • Supports 640x480 resolution
+    • Optimized for ~20-30 FPS
+
+Security:
+    • Local processing (no cloud uploads)
+    • CORS protected endpoints
+    • WebSocket secure when needed
+    • No data persistence
+
+════════════════════════════════════════════════════════════════════════
+
+🎯 NEXT STEPS
+
+1. Launch: python start_web_app.py
+2. Open: http://localhost:5000
+3. Click: "▶ Start Webcam"
+4. Test: Introduce another person to frame
+5. Observe: Detection and alert behavior
+6. Configure: Adjust settings as needed
+7. Export: Download metrics for analysis
+
+════════════════════════════════════════════════════════════════════════
+
+💡 TIPS & BEST PRACTICES
+
+✓ Use in well-lit area for best face detection
+✓ Keep face clear and facing camera
+✓ Start with sensitivity level 5, adjust as needed
+✓ Enable blur if protecting sensitive information
+✓ Use sensitivity 8-10 for strict protection
+✓ Export metrics regularly for analysis
+✓ Monitor logs for troubleshooting
+✓ Test with different people for calibration
+
+════════════════════════════════════════════════════════════════════════
+
+🌟 ENJOY YOUR WEB APP!
+
+Your Shoulder Surfing Detection system is now accessible via the web!
+
+Questions or issues? Check WEB_APP_README.md for detailed documentation.
+
+════════════════════════════════════════════════════════════════════════
