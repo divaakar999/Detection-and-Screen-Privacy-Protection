@@ -7,7 +7,6 @@ font = "sans serif"
 
 [client]
 showErrorDetails = false
-showWarningOnDirectExecution = true
 toolbarMode = "minimal"
 
 [server]
@@ -19,7 +18,3 @@ enableXsrfProtection = false
 
 [logger]
 level = "info"
-
-[ui]
-hideTopBar = false
-hideStreamlitBranding = false
