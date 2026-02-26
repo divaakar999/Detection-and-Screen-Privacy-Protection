@@ -44,60 +44,195 @@ st.set_page_config(
 # ========== CUSTOM STYLING ==========
 st.markdown("""
 <style>
+    /* Overall page styling */
     .main {
-        padding: 1.5rem;
+        background-color: #0f172a;
+        padding: 2rem;
     }
     
-    /* Header styling */
+    /* Title styling */
     h1 {
-        color: #fff;
-        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-        padding: 1.5rem;
-        border-radius: 0.75rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1rem;
+        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
     
-    /* Metric cards */
+    /* Subtitle styling */
+    .subtitle {
+        color: #94a3b8;
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    /* Metric containers */
     [data-testid="metric-container"] {
-        background-color: #1e293b;
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid #334155;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    [data-testid="metric-container"]:hover {
+        border-color: #3b82f6;
+        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    /* Metric labels */
+    [data-testid="metric-container"] label {
+        color: #cbd5e1;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+    
+    /* Metric values */
+    [data-testid="metric-container"] > div:nth-child(2) {
+        color: #ffffff;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    
+    /* Safe status */
+    .safe-alert {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+        border: 1px solid #22c55e;
+        border-left: 4px solid #22c55e;
         padding: 1.5rem;
         border-radius: 0.75rem;
-        border-left: 4px solid #3b82f6;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 1.5rem 0;
+    }
+    
+    .safe-alert h3 {
+        color: #22c55e;
+        margin: 0 0 0.5rem 0;
     }
     
     /* Threat alert */
     .threat-alert {
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-        border: 2px solid #dc2626;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+        border: 1px solid #ef4444;
+        border-left: 4px solid #ef4444;
         padding: 1.5rem;
         border-radius: 0.75rem;
         margin: 1.5rem 0;
-        box-shadow: 0 4px 6px rgba(220, 38, 38, 0.1);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
     
-    /* Safe status */
-    .safe-status {
-        color: #16a34a;
-        font-weight: bold;
-        font-size: 1.1rem;
+    .threat-alert h3 {
+        color: #ef4444;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.25rem;
     }
     
-    /* Threat status */
-    .threat-status {
-        color: #dc2626;
-        font-weight: bold;
-        font-size: 1.1rem;
+    .threat-alert p {
+        color: #fecaca;
+        margin: 0;
     }
     
-    /* Sidebar styling */
-    .sidebar .sidebar-content {
-        padding: 1.5rem;
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.95;
+        }
     }
     
+    /* Status badge */
+    .status-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+    
+    .status-safe {
+        background-color: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+        border: 1px solid #22c55e;
+    }
+    
+    .status-threat {
+        background-color: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        border: 1px solid #ef4444;
+    }
+    
+    /* Sidebar */
     [data-testid="stSidebar"] {
         background-color: #0f172a;
+    }
+    
+    [data-testid="stSidebar"] > div:first-child {
+        padding-top: 1rem;
+    }
+    
+    /* Section headers */
+    h2, h3 {
+        color: #ffffff;
+    }
+    
+    .stDivider {
+        border-color: #334155;
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        transform: translateY(-2px);
+    }
+    
+    /* Slider styling */
+    .stSlider > label {
+        color: #cbd5e1;
+    }
+    
+    /* Checkbox styling */
+    .stCheckbox > label {
+        color: #cbd5e1;
+    }
+    
+    /* Number input styling */
+    .stNumberInput > label {
+        color: #cbd5e1;
+    }
+    
+    /* Text styling */
+    p, span, li {
+        color: #cbd5e1;
+    }
+    
+    /* Links */
+    a {
+        color: #3b82f6;
+        text-decoration: none;
+    }
+    
+    a:hover {
+        color: #60a5fa;
+        text-decoration: underline;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -154,8 +289,18 @@ def run_demo_mode():
     st.rerun()
 
 # ========== HEADER ==========
-st.title("🔒 Shoulder Surfing Detection System")
-st.markdown("**Real-Time Privacy Protection** | Deployed on Streamlit Cloud")
+col_title, col_status = st.columns([3, 1])
+
+with col_title:
+    st.title("🔒 Shoulder Surfing Detection")
+    st.markdown('<p class="subtitle">Real-Time Privacy Protection System</p>', unsafe_allow_html=True)
+
+with col_status:
+    # Display current status at top right
+    if HAS_CV2:
+        st.markdown('<div class="status-badge status-safe">✅ Live Mode</div>', unsafe_allow_html=True)
+    else:
+        st.markdown('<div class="status-badge status-threat">⚠️ Demo Mode</div>', unsafe_allow_html=True)
 
 # ========== SIDEBAR CONFIG ==========
 with st.sidebar:
@@ -264,6 +409,13 @@ if st.session_state.threat_active:
     <div class='threat-alert'>
         <h3>🚨 THREAT DETECTED!</h3>
         <p>Multiple faces detected in frame. Screen blur activated.</p>
+    </div>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <div class='safe-alert'>
+        <h3>✅ All Clear</h3>
+        <p>No threats detected. System operating normally.</p>
     </div>
     """, unsafe_allow_html=True)
 
