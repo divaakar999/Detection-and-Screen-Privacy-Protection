@@ -4,13 +4,21 @@ Deployed on Streamlit Cloud for easy cloud access
 """
 
 import streamlit as st
-import cv2
 import numpy as np
 from datetime import datetime
 import json
 import os
 from pathlib import Path
 import sys
+from PIL import Image, ImageDraw
+
+# Try to import cv2, but don't fail if it's not available (for cloud deployment)
+try:
+    import cv2
+    HAS_CV2 = True
+except ImportError:
+    HAS_CV2 = False
+    st.warning("⚠️ OpenCV not available - running in demo mode")
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent))
@@ -19,8 +27,12 @@ try:
     from src.face_detector import FaceDetector
     from src.event_logger import logger, DetectionLogger
 except ImportError:
-    st.error("❌ Error: Core modules not found. Make sure you're in the correct directory.")
-    st.stop()
+    # Create dummy classes for demo mode
+    FaceDetector = None
+    DetectionLogger = None
+    if HAS_CV2:
+        st.error("❌ Error: Core modules not found. Make sure you're in the correct directory.")
+        st.stop()
 
 # ========== PAGE CONFIG ==========
 st.set_page_config(
@@ -211,8 +223,8 @@ with col_video:
             st.session_state.is_running = False
             st.rerun()
     
-    # Webcam capture
-    if st.session_state.is_running:
+    # Webcam capture (only if cv2 is available)
+    if HAS_CV2 and st.session_state.is_running:
         try:
             camera = cv2.VideoCapture(0)
             
@@ -286,13 +298,17 @@ with col_video:
         except Exception as e:
             st.error(f"❌ Error: {str(e)}")
             st.session_state.is_running = False
+    elif not HAS_CV2 and st.session_state.is_running:
+        st.info("📡 Running demo mode (OpenCV not available on cloud)")
+        run_demo_mode()
     else:
-        # Display placeholder image
-        placeholder_img = np.zeros((480, 640, 3), dtype=np.uint8)
-        cv2.putText(placeholder_img, "Click 'Start Webcam' to begin", (150, 240),
-                   cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-        placeholder_img_rgb = cv2.cvtColor(placeholder_img, cv2.COLOR_BGR2RGB)
-        video_placeholder.image(placeholder_img_rgb, channels="RGB", use_column_width=True)
+        # Display placeholder with Pillow instead of cv2
+        placeholder_img = Image.new('RGB', (640, 480), color=(0, 0, 0))
+        draw = ImageDraw.Draw(placeholder_img)
+        text = "Click 'Start Webcam' to begin"
+        # Draw text (simple without fonts)
+        draw.multiline_text((150, 230), text, fill=(255, 255, 255))
+        video_placeholder.image(placeholder_img, use_column_width=True)
 
 with col_info:
     st.subheader("📊 Frame Details")
