@@ -202,6 +202,73 @@ ENABLE_EVENT_LOGGING = True
 
 ---
 
+## 📄 Presentation Overview (for PPT)
+
+To assist with preparing a PowerPoint presentation, the following sections outline the required slides and content. You can copy these directly into your slides.
+
+### Title
+**Real-Time Shoulder Surfing Detection & Screen Privacy Protection**
+
+### Abstract
+A system that continuously monitors the user's webcam to detect unauthorized observers (shoulder surfers) using deep learning-based face detection and gaze estimation. Upon threat detection, the system automatically blurs the screen to protect sensitive data, logs events, and provides a user-friendly interface.
+
+### Introduction
+Shoulder surfing is a pervasive privacy threat in public spaces where attackers look over a user's shoulder to capture confidential information. With increasing remote work, protecting screen privacy is critical. This project implements an automated detection and mitigation system using computer vision techniques.
+
+### Existing System and Disadvantages
+- Manual vigilance required by users
+- Mobile apps only obscure limited regions of the screen
+- No real-time automated alerts or logging
+- High false positives/negatives with simple threshold methods
+
+### Proposed System and Advantages
+- **Real-time automated detection** using CNN-based face detection and gaze estimation.
+- **Automatic screen blur overlay** to instantly protect sensitive content.
+- **Event logging** for audit trails and analytics.
+- **Integrated browser extension** for video call protection.
+- **User-friendly dashboard** with configuration and metrics.
+
+### Proposed System Architecture or Model
+The architecture consists of:
+1. **Webcam input** – captures frames continuously.
+2. **Face Detector** – CNN model detects faces in each frame.
+3. **Gaze Estimator** – estimates direction of each detected face.
+4. **Threat Analyzer** – determines if gaze indicates shoulder surfing.
+5. **Screen Blur Controller** – activates PyQt5 overlay when threat detected.
+6. **Event Logger** – records detection events with timestamps.
+7. **GUI & Extension** – provides dashboard and Chrome extension for integration.
+
+(You may include a block diagram or flowchart here in the PPT.)
+
+### Modules List (Full Titles Only)
+- Face Detection Module
+- Gaze Estimation Module
+- Threat Analysis Engine
+- Screen Blur Overlay Module
+- Event Logging Module
+- GUI Interface Module
+- Chrome Extension Module
+
+### Module Description (at least 3 modules explanation)
+1. **Face Detection Module** – Uses OpenCV with a pre-trained CNN (SSD/MobileNetV2) to locate faces in video frames with high precision and low latency.
+2. **Gaze Estimation Module** – Employs MediaPipe Face Mesh to compute eye landmarks and infer gaze direction, helping determine whether a person is looking at the screen.
+3. **Screen Blur Overlay Module** – Implements a semi-transparent PyQt5 window that covers the display and applies Gaussian blur when a threat is detected, instantly obscuring sensitive information.
+
+(Additional modules can be described similarly.)
+
+### Sample Screenshot of Modules
+Include screenshots of key application modules (e.g., dashboard, face detection in action, blur overlay).
+
+![Module Screenshot Placeholder](path/to/your/screenshot.png)
+
+*(Replace the above path with the actual image file you add to the repository.)*
+
+---
+
+*Add any additional notes or slides as needed for the presentation.*
+
+---
+
 ## Core Functionality
 
 ### 1. Face Detection

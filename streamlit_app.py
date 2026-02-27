@@ -447,7 +447,7 @@ with tabs[0]:
     
     # Metrics Row
     col1, col2, col3, col4 = st.columns(4)
-
+    
     with col1:
         st.metric(
             "Faces Detected",
@@ -509,19 +509,21 @@ with tabs[0]:
             placeholder_img = Image.new('RGB', (640, 480), color='#1a1a1a')
             draw = ImageDraw.Draw(placeholder_img)
             draw.text((220, 220), "Camera Feed", fill='white')
-            video_placeholder.image(placeholder_img, use_column_width=True)
+            video_placeholder.image(placeholder_img, width=640)
     
     with col_controls:
         st.write("**Controls**")
-        col_start, col_stop = st.columns(1)
+        col_start, col_stop = st.columns(2)
         
-        if st.button("▶️ Start Webcam", key="start_btn", use_container_width=True):
-            st.session_state.is_running = True
-            st.rerun()
+        with col_start:
+            if st.button("▶️ Start", key="start_btn", use_container_width=True):
+                st.session_state.is_running = True
+                st.rerun()
         
-        if st.button("⏹️ Stop Webcam", key="stop_btn", use_container_width=True):
-            st.session_state.is_running = False
-            st.rerun()
+        with col_stop:
+            if st.button("⏹️ Stop", key="stop_btn", use_container_width=True):
+                st.session_state.is_running = False
+                st.rerun()
     
     # Webcam capture (only if cv2 is available)
     if HAS_CV2 and st.session_state.is_running:
